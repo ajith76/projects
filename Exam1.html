@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background: whitesmoke;
+        font-family: Roboto, "sans-serif";
+      }
+      .user {
+        display: flex;
+        background-color: white;
+        gap: 1rem;
+        padding: 0.8rem;
+        border-radius: 0.8rem;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      }
+
+      .user-pic {
+        height: 5rem;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+      }
+
+      .user-name {
+        margin-top: 0px;
+      }
+
+      .users-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        max-width: 30rem;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .add-recipe-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 30rem;
+        margin: 1rem auto;
+      }
+
+      .add-recipe-form * {
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Recipe's DataBase🥗🍚🍲🍗🍔</h1>
+    <input class="searchbar" type="text" placeholder="search" />
+    <div class="add-recipe-form">
+      <input class="Recipe-name" type="text" placeholder="Recipe Name" />
+      <input class="ingredients" type="text" placeholder="ingredients" />
+      <input class="instructions" type="text" placeholder="instructions" />
+      <input class="recipe-image" type="text" placeholder="Picture URL" />
+      <button onclick="addRecipe()">Add Recipe</button>
+    </div>
+    <section class="users-container"></section>
+    <script>
+      const usersList = document.querySelector(".users-container");
+
+      function addRecipe() {
+        console.log("Adding...");
+        const name = document.querySelector(".Recipe-name").value;
+        const avatar = document.querySelector(".recipe-image").value;
+        const ingredients = document.querySelector(".ingredients").value;
+        const instructions = document.querySelector(".instructions").value;
+
+        const data = {
+          recipeName,
+          imageUrl,
+          ingredients,
+          instructions,
+        };
+
+        // Create
+        // 1. method - POST
+        // 2. data - JSON & body
+        // 3. Header - JSON data
+
+        // Create -> Refresh
+        fetch("https://64f6f4189d7754084952d85e.mockapi.io/recipe", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-type": "application/json",
+          },
+        }).then(() => getRecipe());
+
+        console.log(recipeName, imageUrl);
+      }
+
+      const createRecipe = ({
+        recipeName,
+        imageUrl,
+        instructions,
+        ingredients,
+        id,
+      }) => {
+        usersList.innerHTML += `<div class="user">
+        <img
+          class="user-pic"
+          src=${imageUrl}
+          alt=${recipeName}
+        />
+        
+        <div class="user-detail">
+          <h2 class="user-name">${recipeName}</h2>
+          <p>${instructions}</p>
+          <p>${ingredients}</p>
+          <button onclick="deleteUser(${id})">Delete</button>
+        </div>
+      </div>`;
+      };
+
+      function deleteUser(id) {
+        // Print the id of user in console
+        console.log("Deleting... User", id);
+
+        // Avoided Race condition
+        // Delete -> Refresh
+        fetch(`https://64f6f4189d7754084952d85e.mockapi.io/recipe/${id}`, {
+          method: "DELETE",
+        }).then(() => getRecipe());
+
+        // Race Condition
+        // Lorry
+        // fetch(`https://60c98aa8772a760017203b57.mockapi.io/users/${id}`, {
+        //   method: "DELETE",
+        // })
+
+        // Ferrari
+        // getUsers()
+      }
+
+      function getRecipe() {
+        fetch("https://64f6f4189d7754084952d85e.mockapi.io/recipe", {
+          method: "GET",
+        })
+          .then((res) => res.json())
+          .then((users) => {
+            // Clear the old list
+            usersList.innerHTML = "";
+            // Adding the new list
+            users.forEach(createRecipe);
+          });
+      }
+
+      getRecipe();
+    </script>
+  </body>
+</html>
