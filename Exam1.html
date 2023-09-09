@@ -52,6 +52,11 @@
       .add-recipe-form * {
         font-size: 1.2rem;
       }
+      .pagination {
+        display: flex;
+
+        justify-content: center;
+      }
     </style>
   </head>
   <body>
@@ -65,6 +70,15 @@
       <button onclick="addRecipe()">Add Recipe</button>
     </div>
     <section class="users-container"></section>
+    <section class="users-container"></section>
+
+    <div class="pagination">
+      <button class="previous-btn" onclick="previousPage()">⬅️</button>
+
+      <span class="pagination-buttons"></span>
+
+      <button class="next-btn" onclick="nextPage()">➡️</button>
+    </div>
     <script>
       const usersList = document.querySelector(".users-container");
 
@@ -153,6 +167,58 @@
             // Adding the new list
             users.forEach(createRecipe);
           });
+        let pageNo = 1;
+        function nextPage() {
+          if (pageNo == singlePageLength) {
+            return;
+          }
+
+          pageNo++;
+
+          getUsers();
+        }
+
+        function previousPage() {
+          if (pageNo == 1) {
+            return;
+          }
+
+          pageNo--;
+
+          getRecipe();
+        }
+
+        function btn(pageNum) {
+          pageNo = pageNum;
+
+          getRecipe();
+        }
+
+        let singlePageLength;
+
+        async function getTotalRecipeCount() {
+          const totalData = await fetch(
+            "https://64f6f4189d7754084952d85e.mockapi.io/recipe"
+          );
+
+          const len = await totalData.json();
+
+          const totalLength = len.length;
+
+          singlePageLength = Math.ceil(totalLength / 10);
+
+          console.log(singlePageLength);
+
+          createPagination();
+        }
+
+        function createPagination() {
+          const buttons = document.querySelector(".pagination-buttons");
+
+          for (let i = 1; i <= singlePageLength; i++) {
+            buttons.innerHTML += `<button class="pagination-buttons" onclick="btn(${i})">${i}</button>`;
+          }
+        }
       }
 
       getRecipe();
