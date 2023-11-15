@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>converter</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div>
+      <h1 id="heading">kilometer to miles</h1>
+    </div>
+    <div>
+      <input type="text" placeholder="length in kilometer" id="val" />
+    </div>
+    <div>
+      <button type="submit" onclick="convert()">convert</button>
+    </div>
+    <div id="result"></div>
+    <script>
+      function convert() {
+        let kilomtrval = Number(document.getElementById("val").value);
+        let milesval = kilomtrval * 0.621371;
+        let result = document.getElementById("result");
+        result.innerHTML = milesval;
+        console.log(milesval);
+      }
+    </script>
+  </body>
+</html>
