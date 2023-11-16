@@ -16,14 +16,13 @@
     <div>
       <button type="submit" onclick="convert()">convert</button>
     </div>
-    <div id="result"></div>
+    <div id="result" class="result"></div>
     <script>
       function convert() {
-        let kilomtrval = Number(document.getElementById("val").value);
-        let milesval = kilomtrval * 0.621371;
-        let result = document.getElementById("result");
-        result.innerHTML = milesval;
-        console.log(milesval);
+        const kilomtrval = Number(document.getElementById("val").value);
+        const milesval = kilomtrval * 0.621371;
+        const result = document.getElementById("result");
+        result.innerHTML = milesval.toFixed(2) + " miles";
       }
     </script>
   </body>
