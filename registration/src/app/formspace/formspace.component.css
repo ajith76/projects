@@ -1,0 +1,26 @@
+div{
+    margin-top: 30px ;
+    width:900px;
+    height: 500px;
+    border: solid black;
+}
+h2{
+    margin-left: 20px;
+}
+.pagination{
+    height: 45px;
+    width: 900px;
+    border: solid black;
+    display:flex ;
+    gap: 20px;
+    
+}
+button{
+    
+    position: relative;
+    font-size: 13px;
+    bottom: 32px;
+    left: 799px;
+    margin-right: 10px;
+    cursor: pointer;
+}

@@ -20,3 +20,8 @@ i{
 .rightend{
     margin-right: 15px;
 }
+.mainscreen{
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+}
