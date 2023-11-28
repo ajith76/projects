@@ -1,0 +1,15 @@
+.left{
+    height: 250px;
+    width: 170px;
+    border: solid black;
+}
+.right{
+    height: 250px;
+    width: 1000px;
+    border: solid black;   
+}
+.entirepage{
+    display: flex;
+    margin-top: 20px;
+    gap: 40px;
+}
