@@ -1,4 +1,7 @@
 export interface Data {
-    id: number;
     name: string;
+    isCompleted: boolean;
+    isProgress: boolean;
+    component: any;
+    data:any[];
 }
