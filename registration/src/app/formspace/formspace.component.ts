@@ -7,6 +7,7 @@ import { Detail3Component } from '../detail-3/detail-3.component';
 import { Detail4Component } from '../detail-4/detail-4.component';
 import { Subscription } from 'rxjs';
 import { DetailsDirective } from '../details.directive';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-formspace',
@@ -19,6 +20,10 @@ export class Formspacecomponent{
   @ViewChild(DetailsDirective)
   appDetails!: DetailsDirective;
 
+  receivedData: any[] = [];
+  message: any;
+  messages: any;
+
   public detailComponents = [
     Detail1Component,
     Detail2Component,
@@ -26,14 +31,14 @@ export class Formspacecomponent{
     Detail4Component,
   ];
 
-  receivedData!: string;
+  // receivedData!: string;
 
   constructor(private dataService: DataService) {}
 
-  public i = -1;
+  public i = 0;
   currentComponent: any = [];
   sub!: Subscription;
-  public next(): void {
+  public next() :void {
     if (this.i <= this.detailComponents.length) {
       this.i += 1;
       this.detailComponent(
@@ -42,7 +47,7 @@ export class Formspacecomponent{
       );
     }
   }
-  public back(): void {
+  public back() : void{
     this.i -= 1;
     this.backDetailComponent(
       this.details[this.i].component,
@@ -51,6 +56,9 @@ export class Formspacecomponent{
   }
 
   ngOnInit() {}
+  ngAfterViewInit() {
+    this.detailComponent(this.details[this.i].component, this.details[this.i]);
+  }
 
   details: Data[] = [
     {
@@ -74,25 +82,40 @@ export class Formspacecomponent{
       component: Detail3Component,
       data: [],
     },
+    {
+      name: 'Submitted',
+      isCompleted: false,
+      isProgress: true,
+      component: Detail4Component,
+      data: [],
+    },
   ];
-detailComponent(currentcomponent:any,data: string){
-  this.receivedData = '';
-  let viewDetailContainerRef = this.appDetails.viewContainerRef;
-  viewDetailContainerRef.clear();
-  let componentRef : ComponentRef<any> = viewDetailContainerRef.createComponent(currentcomponent);
-  componentRef.instance.data = data;
-  componentRef.instance.output.subscribe((results : string)=>{
-    this.receivedData = results;
-    console.log(this.receivedData);
-  })
-}
-backDetailComponent(currentComponent: any, data: any) {
-  let viewDetailContainerRef = this.appDetails.viewContainerRef;
-  viewDetailContainerRef.clear();
-  let componentRef: ComponentRef<any> =
-    viewDetailContainerRef.createComponent(currentComponent);
-  componentRef.instance.data = data;
-  componentRef.instance.receivedData = this.details[this.i].data;
-  console.log(this.details[this.i].data);
-}
+  detailComponent(currentComponent: any, data: any) {
+    let viewDetailContainerRef = this.appDetails.viewContainerRef;
+    viewDetailContainerRef.clear();
+    let componentRef: ComponentRef<any> =
+      viewDetailContainerRef.createComponent(currentComponent);
+    componentRef.instance.data = data;
+    componentRef.instance.receivedData = this.details[this.i].data;
+    componentRef.instance.output.subscribe((results: any) => {
+      this.details[this.i - 1].data = results;
+      console.log(this.details);
+    });
+  }
+
+  backDetailComponent(currentComponent: any, data: any) {
+    let viewDetailContainerRef = this.appDetails.viewContainerRef;
+    viewDetailContainerRef.clear();
+    let componentRef: ComponentRef<any> =
+      viewDetailContainerRef.createComponent(currentComponent);
+    componentRef.instance.data = data;
+    componentRef.instance.receivedData = this.details[this.i].data;
+    console.log(this.details[this.i].data);
+  }
+
+  receivedMessage($event: any) {
+    this.message = $event;
+    this.messages = this.message[0].name;
+    console.log(this.message);
+  }
 }
